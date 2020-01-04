@@ -3,10 +3,15 @@ import {AuthorService} from './author.service';
 import {CreateAuthorDto} from './dto/create-author.dto';
 import {UpdateAuthorDto} from './dto/update-author.dto';
 import {Author} from './author.entity';
+import {Book} from '../book/book.entity';
+import {BookService} from '../book/book.service';
 
 @Controller('authors')
 export class AuthorController {
-    constructor(public authorService: AuthorService) {
+    constructor(
+        private readonly authorService: AuthorService,
+        private readonly bookService: BookService,
+    ) {
     }
 
     @Post()
@@ -23,6 +28,11 @@ export class AuthorController {
     @Get(':id')
     findOneById(@Param('id') id: string): Promise<Author> {
         return this.getAuthor(id);
+    }
+
+    @Get(':id/books')
+    findAllByAuthorId(@Param('id') id: string): Promise<Book[]> {
+        return this.bookService.findAllByAuthorId(id);
     }
 
     @Put(':id')

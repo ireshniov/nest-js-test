@@ -13,11 +13,15 @@ export class BookService {
         return this.bookRepository.save(book);
     }
 
-    findAll(): Promise<Book[]> {
-        return this.bookRepository.find();
+    findAllByAuthorId(authorId: string): Promise<Book[]> {
+        return this.bookRepository.find({
+            where: {
+                authorId: {$eq: authorId},
+            },
+        });
     }
 
-    findOneById(id: number | string): Promise<Book> {
+    findOneById(id: string): Promise<Book> {
         return this.bookRepository.findOne(id);
     }
 

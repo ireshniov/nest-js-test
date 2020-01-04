@@ -6,7 +6,7 @@ export class UpdateBookDto {
 
     @IsString()
     @MaxLength(32)
-    readonly iban: string;
+    readonly iBan: string;
 
     @IsDateString()
     readonly publishedAt: string;

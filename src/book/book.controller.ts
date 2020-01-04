@@ -15,11 +15,6 @@ export class BookController {
         return this.bookService.create(createBookDto);
     }
 
-    @Get()
-    findAll(): Promise<Book[]> {
-        return this.bookService.findAll();
-    }
-
     @Get(':id')
     findOneById(@Param('id') id: string): Promise<Book> {
         return this.getBook(id);

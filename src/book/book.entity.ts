@@ -9,6 +9,9 @@ export class Book {
     title: string;
 
     @Column({type: 'varchar' })
+    authorId: string;
+
+    @Column({type: 'varchar' })
     iban: string;
 
     @Column({type: 'datetime' })
