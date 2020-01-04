@@ -22,12 +22,12 @@ export class AuthorController {
 
     @Get(':id')
     findOneById(@Param('id') id: string): Promise<Author> {
-        return this.getHero(id);
+        return this.getAuthor(id);
     }
 
     @Put(':id')
     async updateOneById(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto): Promise<Author> {
-        const author: Author = await this.getHero(id);
+        const author: Author = await this.getAuthor(id);
 
         return this.authorService.update(author, updateAuthorDto);
     }
@@ -35,12 +35,12 @@ export class AuthorController {
     @Delete(':id')
     @HttpCode(204)
     async deleteOneById(@Param('id') id: string): Promise<void> {
-        const author: Author = await this.getHero(id);
+        const author: Author = await this.getAuthor(id);
 
         await this.authorService.delete(author);
     }
 
-    getHero(id: string): Promise<Author> {
+    getAuthor(id: string): Promise<Author> {
         return this.authorService.findOneById(id).then(
             author => {
                 if (author === undefined) {

@@ -4,6 +4,8 @@ import {APP_INTERCEPTOR, APP_PIPE} from '@nestjs/core';
 import {TransformInterceptor} from './transform.interceptor';
 import {AuthorModule} from './author/author.module';
 import {Author} from './author/author.entity';
+import {BookModule} from './book/book.module';
+import {Book} from './book/book.entity';
 
 @Module({
   imports: [
@@ -14,10 +16,12 @@ import {Author} from './author/author.entity';
       useUnifiedTopology: true,
       entities: [
         Author,
+        Book,
       ],
       synchronize: true,
     }),
     AuthorModule,
+    BookModule,
   ],
   providers: [
     {

@@ -1,4 +1,4 @@
-import {IsString, IsDate, IsDateString} from 'class-validator';
+import {IsString, IsDateString} from 'class-validator';
 
 export class CreateAuthorDto {
     @IsString()
