@@ -1,12 +1,16 @@
-import {IsString, IsDateString} from 'class-validator';
+import { IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAuthorDto {
     @IsString()
+    @ApiProperty({ type: 'string', required: true, example: 'Igor', description: 'First name of the Author' })
     readonly firstName: string;
 
     @IsString()
+    @ApiProperty({ type: 'string', required: true, example: 'Reshniov', description: 'Last name of the Author' })
     readonly lastName: string;
 
-    @IsDateString()
-    readonly birthday: string;
+    // TODO date field;
+    // @IsDateString()
+    // readonly birthday: string;
 }

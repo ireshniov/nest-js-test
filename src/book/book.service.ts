@@ -3,6 +3,7 @@ import {BookRepository} from './book.repository';
 import {UpdateBookDto} from './dto/update-book.dto';
 import {Book} from './book.entity';
 import {CreateBookDto} from './dto/create-book.dto';
+import { Author } from '@author/author.entity';
 
 @Injectable()
 export class BookService {
@@ -13,10 +14,10 @@ export class BookService {
         return this.bookRepository.save(book);
     }
 
-    findAllByAuthorId(authorId: string): Promise<Book[]> {
+    findAllByAuthor(author: Author): Promise<Book[]> {
         return this.bookRepository.find({
             where: {
-                authorId: {$eq: authorId},
+                authorId: {$eq: author.id},
             },
         });
     }
