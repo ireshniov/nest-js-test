@@ -95,6 +95,7 @@ export class AuthorController {
         await this.authorService.delete(author);
     }
 
+    // TODO move in pipe;
     getAuthor(id: string): Promise<Author> {
         return this.authorService.findOneById(id).then(
             author => {

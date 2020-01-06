@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import {AuthorRepository} from './author.repository';
+import { Inject, Injectable } from '@nestjs/common';
 import {CreateAuthorDto} from './dto/create-author.dto';
 import {UpdateAuthorDto} from './dto/update-author.dto';
 import {Author} from './author.entity';
+import { MongoRepository } from 'typeorm';
 
 @Injectable()
 export class AuthorService {
-    constructor(private readonly authorRepository: AuthorRepository) {}
+    constructor(
+      @Inject('AUTHOR_REPOSITORY')
+      private readonly authorRepository: MongoRepository<Author>
+    ) {}
 
     create(createAuthorDto: CreateAuthorDto): Promise<Author> {
         const author = this.authorRepository.create(createAuthorDto);

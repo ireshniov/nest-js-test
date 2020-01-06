@@ -8,8 +8,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: toor
-      MONGO_INITDB_DATABASE: task
+      MONGO_INITDB_DATABASE: ${DATABASE_NAME}
     ports:
-      - 27017:27017
+      - ${DATABASE_PORT}:${DATABASE_PORT}
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

@@ -64,6 +64,7 @@ export class BookController {
         await this.bookService.delete(book);
     }
 
+    // TODO move in pipe;
     getBook(id: string): Promise<Book> {
         return this.bookService.findOneById(id).then(
             book => {

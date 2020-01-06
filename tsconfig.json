@@ -12,7 +12,9 @@
     "incremental": true,
     "paths": {
       "@author/*": ["author/*"],
-      "@book/*": ["book/*"]
+      "@book/*": ["book/*"],
+      "@config/*": ["config/*"],
+      "@database/*": ["database/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
