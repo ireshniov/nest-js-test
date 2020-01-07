@@ -1,4 +1,4 @@
-import {Entity, Column, ObjectID, ObjectIdColumn, CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import { Entity, Column, ObjectID, ObjectIdColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({name: 'books'})
@@ -7,25 +7,28 @@ export class Book {
     @ApiProperty({ type: 'string', example: '5e11539a63effe16ddd558b7', description: 'Book ID' })
     id: ObjectID;
 
-    @Column({type: 'varchar' })
+    @Column()
+    @Index({ unique: true })
     @ApiProperty({ type: 'string', example: 'HarryPotter', description: 'Book title' })
     title: string;
 
-    @Column({type: 'varchar' })
+    @Column()
     @ApiProperty({ type: 'string', example: '5e11539a63effe16ddd558b7', description: 'Author ID' })
     authorId: string;
 
-    @Column({type: 'varchar' })
-    @ApiProperty({ type: 'string', example: 'here is valid IBAN', description: 'IBAN' })
+    @Column()
+    @ApiProperty({ type: 'string', example: 'here is valid IBAN', description: 'Book IBAN' })
     iBan: string;
 
-    // TODO date fields;
-    // @Column({type: 'datetime' })
-    // publishedAt: Date;
-    //
-    // @CreateDateColumn({type: 'datetime'})
-    // createdAt: Date;
-    //
-    // @UpdateDateColumn({type: 'datetime'})
-    // updatedAt: Date;
+    @Column({type: 'datetime' })
+    @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Book published at' })
+    publishedAt: Date;
+
+    @CreateDateColumn()
+    @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Book create date' })
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Book update date' })
+    updatedAt: Date;
 }

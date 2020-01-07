@@ -1,4 +1,4 @@
-import { IsString, MaxLength, Length, IsNotEmpty } from 'class-validator';
+import { IsString, MaxLength, Length, IsNotEmpty, IsDateString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBookDto {
@@ -8,6 +8,7 @@ export class CreateBookDto {
     readonly title: string;
 
     @IsString()
+    @IsNotEmpty()
     @Length(24, 24)
     @ApiProperty({ type: 'string', required: true, example: '5e11539a63effe16ddd558b7', description: 'Author ID' })
     readonly authorId: string;
@@ -15,10 +16,11 @@ export class CreateBookDto {
     @IsString()
     @IsNotEmpty()
     @MaxLength(32)
-    @ApiProperty({ type: 'string', required: true, example: 'here is valid IBAN', description: 'IBAN' })
+    @ApiProperty({ type: 'string', required: true, example: 'here is valid IBAN', description: 'Book IBAN' })
     readonly iBan: string;
 
-    // TODO date field;
-    // @IsDateString()
-    // readonly publishedAt: string;
+    @IsDateString()
+    @IsNotEmpty()
+    @ApiProperty({ type: 'string', required: true, example: '2020-01-03T00:00:00.001Z', description: 'Book published at' })
+    readonly publishedAt: Date;
 }

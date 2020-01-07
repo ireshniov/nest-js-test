@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import {AuthorService} from './author.service';
 import {CreateAuthorDto} from './dto/create-author.dto';
 import {UpdateAuthorDto} from './dto/update-author.dto';
@@ -9,6 +9,7 @@ import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { AuthorByIdPipe } from '@author/author-by-id.pipe';
 
 @Controller('authors')
+@UsePipes(ValidationPipe)
 @ApiTags('authors')
 export class AuthorController {
     constructor(
@@ -25,7 +26,7 @@ export class AuthorController {
         description: 'Created author',
         type: Author,
     })
-    create(@Body(new ValidationPipe()) createAuthorDto: CreateAuthorDto): Promise<Author> {
+    create(@Body() createAuthorDto: CreateAuthorDto): Promise<Author> {
         return this.authorService.create(createAuthorDto);
     }
 
@@ -74,7 +75,7 @@ export class AuthorController {
         type: Author
     })
     @ApiResponse({ status: 404, description: 'Author not exists' })
-    async updateOneById(@Param('id', AuthorByIdPipe) author: Author, @Body(new ValidationPipe({skipMissingProperties: true})) updateAuthorDto: UpdateAuthorDto): Promise<Author> {
+    async updateOneById(@Param('id', AuthorByIdPipe) author: Author, @Body() updateAuthorDto: UpdateAuthorDto): Promise<Author> {
         return this.authorService.update(author, updateAuthorDto);
     }
 
