@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, ValidationPipe } from '@nestjs/common';
 import {Book} from './book.entity';
 import {UpdateBookDto} from './dto/update-book.dto';
 import {BookService} from './book.service';
@@ -20,7 +20,7 @@ export class BookController {
         description: 'Created book',
         type: Book,
     })
-    create(@Body() createBookDto: CreateBookDto): Promise<Book> {
+    create(@Body(new ValidationPipe()) createBookDto: CreateBookDto): Promise<Book> {
         return this.bookService.create(createBookDto);
     }
 
@@ -44,7 +44,7 @@ export class BookController {
         type: Book
     })
     @ApiResponse({ status: 404, description: 'Book not exists' })
-    async updateOneById(@Param('id', BookByIdPipe) book: Book, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
+    async updateOneById(@Param('id', BookByIdPipe) book: Book, @Body(new ValidationPipe({skipMissingProperties: true})) updateBookDto: UpdateBookDto): Promise<Book> {
         return this.bookService.update(book, updateBookDto);
     }
 
