@@ -1,4 +1,4 @@
-import {Entity, Column, ObjectID, ObjectIdColumn} from 'typeorm';
+import { Entity, Column, ObjectID, ObjectIdColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({name: 'authors'})
@@ -19,11 +19,11 @@ export class Author {
     // @Column({type: 'datetime' })
     // birthday: Date;
 
-    // @CreateDateColumn({type: 'datetime'})
-    // @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Author create date' })
-    // createdAt: Date;
-    //
-    // @UpdateDateColumn({type: 'datetime'})
-    // @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Author update date' })
-    // updatedAt: Date;
+    @CreateDateColumn({type: 'datetime'})
+    @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Author create date' })
+    createdAt: Date;
+
+    @UpdateDateColumn({type: 'datetime'})
+    @ApiProperty({ type: 'Date', example: '2020-01-03T00:00:00.001Z', description: 'Author update date' })
+    updatedAt: Date;
 }

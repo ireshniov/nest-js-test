@@ -1,4 +1,4 @@
-import {BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put} from '@nestjs/common';
 import {AuthorService} from './author.service';
 import {CreateAuthorDto} from './dto/create-author.dto';
 import {UpdateAuthorDto} from './dto/update-author.dto';
@@ -6,6 +6,7 @@ import {Author} from './author.entity';
 import {Book} from '@book/book.entity';
 import {BookService} from '@book/book.service';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
+import { AuthorByIdPipe } from '@author/author-by-id.pipe';
 
 @Controller('authors')
 @ApiTags('authors')
@@ -48,8 +49,8 @@ export class AuthorController {
         type: Author
     })
     @ApiResponse({ status: 404, description: 'Author not exists' })
-    findOneById(@Param('id') id: string): Promise<Author> {
-        return this.getAuthor(id);
+    findOneById(@Param('id', AuthorByIdPipe) author: Author): Author {
+        return author;
     }
 
     @Get(':id/books')
@@ -61,9 +62,7 @@ export class AuthorController {
         isArray: true
     })
     @ApiResponse({ status: 404, description: 'Author not exists' })
-    async findAllByAuthorId(@Param('id') id: string): Promise<Book[]> {
-        const author: Author = await this.getAuthor(id);
-
+    async findAllByAuthorId(@Param('id', AuthorByIdPipe) author: Author): Promise<Book[]> {
         return this.bookService.findAllByAuthor(author);
     }
 
@@ -75,9 +74,7 @@ export class AuthorController {
         type: Author
     })
     @ApiResponse({ status: 404, description: 'Author not exists' })
-    async updateOneById(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto): Promise<Author> {
-        const author: Author = await this.getAuthor(id);
-
+    async updateOneById(@Param('id', AuthorByIdPipe) author: Author, @Body() updateAuthorDto: UpdateAuthorDto): Promise<Author> {
         return this.authorService.update(author, updateAuthorDto);
     }
 
@@ -89,23 +86,7 @@ export class AuthorController {
         description: 'Deleted author'
     })
     @ApiResponse({ status: 404, description: 'Author not exists' })
-    async deleteOneById(@Param('id') id: string): Promise<void> {
-        const author: Author = await this.getAuthor(id);
-
+    async deleteOneById(@Param('id', AuthorByIdPipe) author: Author): Promise<void> {
         await this.authorService.delete(author);
-    }
-
-    // TODO move in pipe;
-    getAuthor(id: string): Promise<Author> {
-        return this.authorService.findOneById(id).then(
-            author => {
-                if (author === undefined) {
-                    throw new NotFoundException();
-                }
-
-                return author;
-            }, () => {
-                throw new BadRequestException();
-            });
     }
 }

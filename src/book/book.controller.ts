@@ -1,10 +1,10 @@
-import {BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put} from '@nestjs/common';
 import {Book} from './book.entity';
 import {UpdateBookDto} from './dto/update-book.dto';
 import {BookService} from './book.service';
 import {CreateBookDto} from './dto/create-book.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Author } from '@author/author.entity';
+import { BookByIdPipe } from '@book/book-by-id.pipe';
 
 @Controller('books')
 @ApiTags('books')
@@ -32,8 +32,8 @@ export class BookController {
         type: Book
     })
     @ApiResponse({ status: 404, description: 'Book not exists' })
-    findOneById(@Param('id') id: string): Promise<Book> {
-        return this.getBook(id);
+    findOneById(@Param('id', BookByIdPipe) book: Book): Book {
+        return book;
     }
 
     @Put(':id')
@@ -44,9 +44,7 @@ export class BookController {
         type: Book
     })
     @ApiResponse({ status: 404, description: 'Book not exists' })
-    async updateOneById(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
-        const book: Book = await this.getBook(id);
-
+    async updateOneById(@Param('id', BookByIdPipe) book: Book, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
         return this.bookService.update(book, updateBookDto);
     }
 
@@ -58,23 +56,7 @@ export class BookController {
         description: 'Deleted book'
     })
     @ApiResponse({ status: 404, description: 'Author not exists' })
-    async deleteOneById(@Param('id') id: string): Promise<void> {
-        const book: Book = await this.getBook(id);
-
+    async deleteOneById(@Param('id', BookByIdPipe) book: Book): Promise<void> {
         await this.bookService.delete(book);
-    }
-
-    // TODO move in pipe;
-    getBook(id: string): Promise<Book> {
-        return this.bookService.findOneById(id).then(
-            book => {
-                if (book === undefined) {
-                    throw new NotFoundException();
-                }
-
-                return book;
-            }, () => {
-                throw new BadRequestException();
-            });
     }
 }
