@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {CreateAuthorDto} from './dto/create-author.dto';
 import {UpdateAuthorDto} from './dto/update-author.dto';
 import {Author} from './author.entity';
 import { MongoRepository } from 'typeorm';
+import { MongoDBExceptionInterface } from '@common/interfaces/mongodb-exception.interface';
 
 @Injectable()
 export class AuthorService {
@@ -13,7 +14,9 @@ export class AuthorService {
 
     create(createAuthorDto: CreateAuthorDto): Promise<Author> {
         const author = this.authorRepository.create(createAuthorDto);
-        return this.authorRepository.save(author);
+        return this.authorRepository.save(author).catch((err: MongoDBExceptionInterface) => {
+            throw new BadRequestException(err.errmsg);
+        });
     }
 
     findAll(): Promise<Author[]> {
@@ -25,7 +28,9 @@ export class AuthorService {
     }
 
     update(author: Author, updateAuthorDto: UpdateAuthorDto): Promise<Author> {
-        return this.authorRepository.save({...author, ...updateAuthorDto});
+        return this.authorRepository.save({...author, ...updateAuthorDto}).catch((err: MongoDBExceptionInterface) => {
+            throw new BadRequestException(err.errmsg);
+        });
     }
 
     delete(author: Author): Promise<Author> {

@@ -14,7 +14,8 @@
       "@author/*": ["author/*"],
       "@book/*": ["book/*"],
       "@config/*": ["config/*"],
-      "@database/*": ["database/*"]
+      "@database/*": ["database/*"],
+      "@common/*": ["common/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

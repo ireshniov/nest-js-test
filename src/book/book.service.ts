@@ -1,9 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {UpdateBookDto} from './dto/update-book.dto';
 import {Book} from './book.entity';
 import {CreateBookDto} from './dto/create-book.dto';
 import { Author } from '@author/author.entity';
 import { MongoRepository } from 'typeorm';
+import { MongoDBExceptionInterface } from '@common/interfaces/mongodb-exception.interface';
 
 @Injectable()
 export class BookService {
@@ -14,7 +15,9 @@ export class BookService {
 
     create(createBookDto: CreateBookDto): Promise<Book> {
         const book = this.bookRepository.create(createBookDto);
-        return this.bookRepository.save(book);
+        return this.bookRepository.save(book).catch((err: MongoDBExceptionInterface) => {
+            throw new BadRequestException(err.errmsg);
+        });
     }
 
     findAllByAuthor(author: Author): Promise<Book[]> {
@@ -30,7 +33,9 @@ export class BookService {
     }
 
     update(book: Book, updateBookDto: UpdateBookDto): Promise<Book> {
-        return this.bookRepository.save({...book, ...updateBookDto});
+        return this.bookRepository.save({...book, ...updateBookDto}).catch((err: MongoDBExceptionInterface) => {
+            throw new BadRequestException(err.errmsg);
+        });
     }
 
     delete(book: Book): Promise<Book> {
